@@ -29,6 +29,8 @@ dependencies {
 	//Database,Migration & Data JPA
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.liquibase:liquibase-core'
+
+	implementation 'org.postgresql:postgresql:42.7.1'
 	runtimeOnly 'com.h2database:h2'
 
 	//Email Template
@@ -37,9 +39,6 @@ dependencies {
 
 	//Validation & Hibernate Types
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
-
-	//Security
-//	implementation 'org.springframework.boot:spring-boot-starter-security'
 
 	//MapStruct, Lombok
 	implementation 'org.mapstruct:mapstruct:1.5.5.Final'
@@ -52,14 +51,12 @@ dependencies {
 	//DevTools, Health (Monitoring)
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-//	developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
 
 	//Open API Swagger
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.3'
 
 	//Testing
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-//	testImplementation 'org.springframework.security:spring-security-test'
 }
 
 tasks.named('test') {

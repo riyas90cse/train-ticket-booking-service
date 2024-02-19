@@ -106,7 +106,7 @@ public class TrainService implements ITrainService {
         return availableTrains.getFirst();
     }
 
-    private List<Train> getAvailableTrainsByFromAndToLocation(String from, String to) {
+    public List<Train> getAvailableTrainsByFromAndToLocation(String from, String to) {
         List<TrainEntity> entities = trainRepository.findTrainEntitiesByOriginLocationAndDestinationLocation(from, to);
         if (entities.isEmpty()) {
             return Collections.emptyList();
@@ -114,7 +114,7 @@ public class TrainService implements ITrainService {
         return trainMapper.toResources(entities);
     }
 
-    private static void setSections(TrainEntity entity, Train train) {
+    public static void setSections(TrainEntity entity, Train train) {
         if (entity.getSections() != null && !entity.getSections().isEmpty()) {
             entity.getSections().forEach(sectionEntity ->
                     train.getSections().forEach(section -> {

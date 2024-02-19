@@ -26,30 +26,31 @@ import static com.cloud.bees.challenge.util.ServiceErrors.TICKET_RECEIPT_NOT_FOU
 
 @Slf4j
 @Service
-public class TicketingService implements ITicketService {
+public class TicketService implements ITicketService {
 
     private final UserService userService;
     private final TrainService trainService;
     private final SectionService sectionService;
     private final SeatService seatService;
-    private final TicketRepository ticketRepository;
     private final TicketMapper ticketMapper;
     private final SeatMapper seatMapper;
     private final SeatRepository seatRepository;
+    private final TicketRepository ticketRepository;
 
     @Autowired
-    public TicketingService(UserService userService, TrainService trainService, SectionService sectionService,
-                            SeatService seatService, TicketRepository ticketRepository,
-                            TicketMapper ticketMapper, SeatMapper seatMapper, SeatRepository seatRepository) {
+    public TicketService(UserService userService, TrainService trainService, SectionService sectionService,
+                         SeatService seatService, TicketMapper ticketMapper, SeatMapper seatMapper,
+                         SeatRepository seatRepository, TicketRepository ticketRepository) {
         this.userService = userService;
         this.trainService = trainService;
         this.sectionService = sectionService;
         this.seatService = seatService;
-        this.ticketRepository = ticketRepository;
         this.ticketMapper = ticketMapper;
         this.seatMapper = seatMapper;
         this.seatRepository = seatRepository;
+        this.ticketRepository = ticketRepository;
     }
+
 
     @Transactional
     @Override
@@ -157,7 +158,7 @@ public class TicketingService implements ITicketService {
         return map;
     }
 
-    private TicketEntity findTicketDetail(String ticketNo) {
+    public TicketEntity findTicketDetail(String ticketNo) {
         TicketEntity entity = ticketRepository.findTicketEntityByTicketNo(ticketNo);
         if (entity == null) {
             throw new NotFoundException(TICKET_RECEIPT_NOT_FOUND);
@@ -165,7 +166,7 @@ public class TicketingService implements ITicketService {
         return entity;
     }
 
-    private Ticket buildTicket(Train train, User user, Seat seat) {
+    public Ticket buildTicket(Train train, User user, Seat seat) {
         Ticket ticket = new Ticket();
         ticket.setTicketNo(generateTicketNo());
         ticket.setConfirmationCode(generateConfirmationCode());

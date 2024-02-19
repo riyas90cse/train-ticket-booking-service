@@ -17,7 +17,7 @@
 
             -- INSERT TRAIN DATA
             INSERT INTO TRAIN (ID, TRAIN_NO, NAME, ORIGIN_LOCATION, DESTINATION_LOCATION)
-            VALUES (1, 'TR_1001', 'Chennai Express', 'Tirunelveli', 'Chennai Central');
+            VALUES (1, 'TR_1001', 'CFR Euro Rail', 'London', 'France');
 
             -- INSERT SECTION DATA
             INSERT INTO SECTIONS(ID, TRAIN_ID, NAME, DESCRIPTION)

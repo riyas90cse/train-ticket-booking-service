@@ -103,7 +103,7 @@ public class SectionService implements ISectionService {
         return availableSections.getFirst();
     }
 
-    private List<Section> getAvailableSections(Long trainId, String trainNo) {
+    public List<Section> getAvailableSections(Long trainId, String trainNo) {
         List<SectionEntity> entities;
         if (trainNo != null) {
             entities = sectionRepository.findSectionEntitiesByTrain_TrainNo(trainNo);
@@ -116,7 +116,7 @@ public class SectionService implements ISectionService {
         }
     }
 
-    private List<Section> getSections(List<SectionEntity> entities) {
+    public List<Section> getSections(List<SectionEntity> entities) {
         List<Section> sections;
         sections = sectionMapper.toResources(entities);
         entities.forEach(sectionEntity -> sections.forEach(section ->

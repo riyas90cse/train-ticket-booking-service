@@ -59,7 +59,7 @@ spring:
         implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
       ddl-auto: none
     database: h2
-#    database-platform: org.hibernate.dialect.H2Dialect
+    database-platform: org.hibernate.dialect.H2Dialect
     defer-datasource-initialization: false
     show-sql: true
     generate-ddl: false
@@ -72,3 +72,34 @@ spring:
     console:
       enabled: true
       path: /h2-console
+---
+#Activate Profile based on Environment
+spring:
+  config:
+    activate:
+      on-profile: ${SPRING_PROFILES_ACTIVE}
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    url: ${SPRING_DATASOURCE_URL}
+    hikari:
+      schema: public
+
+  jpa:
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+      ddl-auto: none
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    defer-datasource-initialization: false
+    show-sql: true
+    generate-ddl: false
+
+    properties:
+      hibernate:
+        format_sql: true
+---

@@ -9,6 +9,8 @@ bin-release/
 .idea/
 .gradle/
 build/
+postgres-data.backup
+
 # Executables
 *.swf
 *.air
