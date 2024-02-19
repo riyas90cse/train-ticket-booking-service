@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet author="Mohamed Riyas" id="create-section-table">
+        <createTable tableName="SECTIONS">
+            <column name="ID" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="PK_ID_SECTIONS"/>
+            </column>
+            <column name="NAME" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="DESCRIPTION" type="VARCHAR(20)"/>
+            <column name="TRAIN_ID" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="Mohamed Riyas" id="addForeignKeyConstraint-train-id">
+        <addForeignKeyConstraint baseColumnNames="TRAIN_ID"
+                                 baseTableName="SECTIONS"
+                                 constraintName="FK_TRAIN_ID"
+                                 onDelete="CASCADE"
+                                 onUpdate="CASCADE"
+                                 referencedColumnNames="ID"
+                                 referencedTableName="TRAIN"
+                                 validate="true"/>
+    </changeSet>
+
+    <changeSet  author="Mohamed Riyas"  id="addUniqueConstraint-section-name">
+        <addUniqueConstraint
+                columnNames="NAME"
+                constraintName="UK_SECTION_NAME"
+                tableName="SECTIONS"
+                validate="true"/>
+    </changeSet>
+
+    <changeSet author="Mohamed Riyas" id="index-section-name">
+        <createIndex indexName="IDX_SECTION_NAME" tableName="SECTIONS">
+            <column name="NAME"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

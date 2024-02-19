@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+
+  app:
+    container_name: Ticket_Booking_Service_App
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8090:8090"
+    depends_on:
+      - postgres
+    environment:
+      SPRING_PROFILES_ACTIVE: "docker"
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+
+  postgres:
+    image: postgres:latest
+    container_name: Postgres_SQL
+    environment:
+#      POSTGRES_DB: bookingdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+
+  liquibase:
+    image: liquibase/liquibase:latest
+    container_name: liquibase
+    command: ["--changeLogFile=db.changelog-master.xml", "--url=jdbc:postgresql://postgres:5432/postgres", "--username=postgres", "--password=postgres", "update"]
+    depends_on:
+      - postgres
+    volumes:
+      - ./liquibase/db.changelog-master.xml:/liquibase/changelog/db.changelog-master.xml
+      - ./liquibase/db.changelog-user.xml:/liquibase/changelog/db.changelog-user.xml
+      - ./liquibase/db.changelog-train.xml:/liquibase/changelog/db.changelog-train.xml
+      - ./liquibase/db.changelog-section.xml:/liquibase/changelog/db.changelog-section.xml
+      - ./liquibase/db.changelog-seat.xml:/liquibase/changelog/db.changelog-seat.xml
+      - ./liquibase/db.changelog-ticket.xml:/liquibase/changelog/db.changelog-ticket.xml
+      - ./liquibase/db.changelog-data.xml:/liquibase/changelog/db.changelog-data.xml

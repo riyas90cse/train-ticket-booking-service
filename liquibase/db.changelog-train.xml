@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet author="Mohamed Riyas" id="create-train-table">
+        <createTable tableName="TRAIN">
+            <column name="ID" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="PK_ID_TRAIN"/>
+            </column>
+            <column name="TRAIN_NO" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NAME" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ORIGIN_LOCATION" type="VARCHAR(50)"/>
+            <column name="DESTINATION_LOCATION" type="VARCHAR(50)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet  author="Mohamed Riyas"  id="addUniqueConstraint-train-no-and-name">
+        <addUniqueConstraint
+                columnNames="TRAIN_NO, NAME"
+                constraintName="UK_TRAIN_NO_AND_NAME"
+                tableName="TRAIN"
+                validate="true"/>
+    </changeSet>
+
+    <changeSet author="Mohamed Riyas" id="index-train-no-and-name">
+        <createIndex indexName="IDX_TRAIN_NO_AND_NAME" tableName="TRAIN">
+            <column name="NAME"/>
+            <column name="TRAIN_NO"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

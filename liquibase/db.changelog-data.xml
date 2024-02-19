@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <preConditions  onFail="WARN">
+        <sqlCheck  expectedResult="0">SELECT COUNT(*) FROM USERS</sqlCheck>
+        <sqlCheck  expectedResult="0">SELECT COUNT(*) FROM TRAIN</sqlCheck>
+        <sqlCheck  expectedResult="0">SELECT COUNT(*) FROM SECTIONS</sqlCheck>
+        <sqlCheck  expectedResult="0">SELECT COUNT(*) FROM SEATS</sqlCheck>
+    </preConditions>
+
+    <changeSet author="Mohamed Riyas" id="insert-data">
+        <sql>
+            -- INSERT USER DATA
+            INSERT INTO USERS (ID, FIRST_NAME, LAST_NAME, EMAIL)
+            VALUES (1, 'Mohamed', 'Riyas', 'riyas90cse@gmail.com');
+
+            INSERT INTO USERS (ID, FIRST_NAME, LAST_NAME, EMAIL)
+            VALUES (2, 'Mohamed', 'Sheik', 'riyascse@gmail.com');
+
+            -- INSERT TRAIN DATA
+            INSERT INTO TRAIN (ID, TRAIN_NO, NAME, ORIGIN_LOCATION, DESTINATION_LOCATION)
+            VALUES (1, 'TR_1001', 'Chennai Express', 'Tirunelveli', 'Chennai Central');
+
+            -- INSERT SECTION DATA
+            INSERT INTO SECTIONS(ID, TRAIN_ID, NAME, DESCRIPTION)
+            VALUES (1, 1, 'A', 'Section A'),
+                   (2, 1, 'B', 'Section B');
+
+            -- INSERT SEAT DATA
+            INSERT INTO SEATS(ID, SEAT_NO, SECTION_ID, IS_OCCUPIED)
+            VALUES (1, 'SC_A_01', 1, FALSE),
+                   (2, 'SC_A_02', 1, FALSE),
+                   (3, 'SC_B_01', 2, FALSE),
+                   (4, 'SC_B_02', 2, FALSE);
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

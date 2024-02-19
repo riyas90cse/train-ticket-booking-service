@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="Mohamed Riyas" id="create-ticket-table">
+        <createTable tableName="TICKETS">
+            <column name="ID" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="PK_ID_TICKETS"/>
+            </column>
+            <column name="TICKET_NO" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="USER_ID" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="SEAT_ID" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="PRICE" type="NUMERIC">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CONFIRMATION_CODE" type="VARCHAR(25)"/>
+            <column name="PAYMENT_STATUS" type="VARCHAR(25)"/>
+            <column name="TICKET_STATUS" type="VARCHAR(25)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="Mohamed Riyas" id="addForeignKeyConstraint-user-id">
+        <addForeignKeyConstraint baseColumnNames="USER_ID"
+                                 baseTableName="TICKETS"
+                                 constraintName="FK_USER_ID"
+                                 onDelete="CASCADE"
+                                 onUpdate="CASCADE"
+                                 referencedColumnNames="ID"
+                                 referencedTableName="USERS"
+                                 validate="true"/>
+    </changeSet>
+
+    <changeSet author="Mohamed Riyas" id="addForeignKeyConstraint-seat-id">
+        <addForeignKeyConstraint baseColumnNames="SEAT_ID"
+                                 baseTableName="TICKETS"
+                                 constraintName="FK_SEAT_ID"
+                                 onDelete="CASCADE"
+                                 onUpdate="CASCADE"
+                                 referencedColumnNames="ID"
+                                 referencedTableName="SEATS"
+                                 validate="true"/>
+    </changeSet>
+
+    <changeSet author="Mohamed Riyas" id="addUniqueConstraint-ticket-no-user-id-seat-id">
+        <addUniqueConstraint
+                columnNames="TICKET_NO, USER_ID, SEAT_ID"
+                constraintName="UK_TICKET_USER_SEAT"
+                tableName="TICKETS"
+                validate="true"/>
+    </changeSet>
+
+    <changeSet author="Mohamed Riyas" id="index-ticket-no-confirmation-code">
+        <createIndex indexName="IDX_TICKET_CONFIRMATION_CODE" tableName="TICKETS">
+            <column name="TICKET_NO"/>
+            <column name="CONFIRMATION_CODE"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>
