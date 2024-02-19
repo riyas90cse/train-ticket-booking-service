@@ -1,5 +1,5 @@
 # Tools And Tech Stack Used
-* Java 17, Spring Boot, Hibernate / JPA, H2 (Local DB), PostgresSQL (Docker DB)
+* Java 21, Spring Boot, Hibernate / JPA, H2 (Local DB), PostgresSQL (Docker DB)
 * Docker and Docker Compose (For Containerizing Application)
 * Liquibase Database Migration Tool
 * MapStruct Entity to Dto and Dto to Entity Mapping Tools [Reduce Boiler Plate Code]
