@@ -42,14 +42,15 @@ As a User I want to board a train from London to France. The train ticket will c
 
 ## Application Documentations Details
 
-- API Contract Document Available in [Api-contract.md](./ApiContract.md)
+- API Contract Document Available in [api-contract.json](./api-contract.json)
 - Tools and Tech Stacks Used to Develop [Help.md](./HELP.md)
 - Feature Discussion Details Proposal of Enhancement Information [Proposal.md](./Proposal.md)
-
 ## Useful Links
-
 - Local Swagger UI URL : [Swagger-UI](http://localhost:8090/swagger-ui/index.html#/)
 - Docker Swagger UI URL : [Swagger-UI](http://localhost:8090/swagger-ui/index.html#/)
 - DB-H2 URI: [H2-DB](http://localhost:8090/h2-console)
 - For Docker DB is PostgresSQL that needs to be connected with Any DB-Client details available in [docker-compose.yaml](./docker-compose.yaml)
 ### Database Configuration Available [application.yml](./src/main/resources/application.yml)
+
+### Image of End Points
+[!Endpoints](api-endpoints.png)
