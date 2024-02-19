@@ -4,6 +4,10 @@ import org.apache.commons.lang3.RandomStringUtils;
 
 public class ApplicationUtil {
 
+    private ApplicationUtil() {
+        //Do Nothing - Added to Solve implicit public constructor Issue on SonarLint
+    }
+
     public static String generateTrainNo() {
         String prefix = "TR_";
         int length = 3;

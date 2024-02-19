@@ -2,6 +2,7 @@ package com.cloud.bees.challenge.service.impl;
 
 import com.cloud.bees.challenge.entity.SeatEntity;
 import com.cloud.bees.challenge.entity.TicketEntity;
+import com.cloud.bees.challenge.exception.NotFoundException;
 import com.cloud.bees.challenge.mapper.SeatMapper;
 import com.cloud.bees.challenge.mapper.TicketMapper;
 import com.cloud.bees.challenge.model.*;
@@ -21,6 +22,7 @@ import java.util.Map;
 
 import static com.cloud.bees.challenge.util.ApplicationUtil.generateConfirmationCode;
 import static com.cloud.bees.challenge.util.ApplicationUtil.generateTicketNo;
+import static com.cloud.bees.challenge.util.ServiceErrors.TICKET_RECEIPT_NOT_FOUND;
 
 @Slf4j
 @Service
@@ -158,7 +160,7 @@ public class TicketingService implements ITicketService {
     private TicketEntity findTicketDetail(String ticketNo) {
         TicketEntity entity = ticketRepository.findTicketEntityByTicketNo(ticketNo);
         if (entity == null) {
-            throw new RuntimeException("Ticket Receipts Not Found for a given confirmation code or ticket no");
+            throw new NotFoundException(TICKET_RECEIPT_NOT_FOUND);
         }
         return entity;
     }

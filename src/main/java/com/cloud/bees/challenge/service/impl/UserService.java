@@ -1,23 +1,22 @@
 package com.cloud.bees.challenge.service.impl;
 
 import com.cloud.bees.challenge.entity.UserEntity;
-import com.cloud.bees.challenge.mapper.TicketMapper;
+import com.cloud.bees.challenge.exception.NotFoundException;
 import com.cloud.bees.challenge.mapper.UserMapper;
-import com.cloud.bees.challenge.model.Ticket;
 import com.cloud.bees.challenge.model.User;
 import com.cloud.bees.challenge.repository.UserRepository;
 import com.cloud.bees.challenge.service.IUserService;
-import org.springframework.http.HttpStatus;
-import org.springframework.transaction.annotation.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-
-import javax.swing.text.html.Option;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+
+import static com.cloud.bees.challenge.util.ServiceErrors.USER_ENTITY_NOT_FOUND_BY_EMAIL;
+import static com.cloud.bees.challenge.util.ServiceErrors.USER_ENTITY_NOT_FOUND_BY_ID;
 
 @Slf4j
 @Service
@@ -46,7 +45,7 @@ public class UserService implements IUserService {
     public User updateUser(User user) {
         Optional<UserEntity> entity = userRepository.findById(user.getId());
         if (entity.isEmpty()) {
-            throw new RuntimeException("User Entity Not Found" + HttpStatus.NOT_FOUND);
+            throw new NotFoundException(USER_ENTITY_NOT_FOUND_BY_ID);
         }
         userMapper.copyToEntity(user, entity.get());
         UserEntity updatedEntity = userRepository.saveAndFlush(entity.get());
@@ -59,7 +58,7 @@ public class UserService implements IUserService {
     public User getUser(Long id) {
         Optional<UserEntity> entity = userRepository.findById(id);
         if (entity.isEmpty()) {
-            throw new RuntimeException("Entity Not Found");
+            throw new NotFoundException(USER_ENTITY_NOT_FOUND_BY_ID);
         }
         User user = userMapper.toResource(entity.get());
         log.info("Existing User {}", user.toString());
@@ -82,7 +81,7 @@ public class UserService implements IUserService {
     public void deleteUser(Long id) {
         Optional<UserEntity> entity = userRepository.findById(id);
         if (entity.isEmpty()) {
-            throw new RuntimeException("Entity Not Found: " + " " + HttpStatus.NOT_FOUND);
+            throw new NotFoundException(USER_ENTITY_NOT_FOUND_BY_ID);
         }
         log.info("Existing User to be deleted {}", entity.get());
         userRepository.delete(entity.get());
@@ -92,7 +91,7 @@ public class UserService implements IUserService {
     public User getUserByEmail(String email) {
         Optional<UserEntity> entity = userRepository.findUserEntityByEmail(email);
         if (entity.isEmpty()) {
-            throw new RuntimeException("Entity Not Found: " + " " + HttpStatus.NOT_FOUND);
+            throw new NotFoundException(USER_ENTITY_NOT_FOUND_BY_EMAIL);
         }
         return userMapper.toResource(entity.get());
     }

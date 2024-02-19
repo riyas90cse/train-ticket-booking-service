@@ -2,9 +2,9 @@ package com.cloud.bees.challenge.service.impl;
 
 import com.cloud.bees.challenge.entity.SeatEntity;
 import com.cloud.bees.challenge.entity.SectionEntity;
+import com.cloud.bees.challenge.exception.NotFoundException;
 import com.cloud.bees.challenge.mapper.SeatMapper;
 import com.cloud.bees.challenge.model.Seat;
-import com.cloud.bees.challenge.model.Section;
 import com.cloud.bees.challenge.repository.SeatRepository;
 import com.cloud.bees.challenge.repository.SectionRepository;
 import com.cloud.bees.challenge.service.ISeatService;
@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.cloud.bees.challenge.service.util.ServiceUtil.setSeatDetails;
+import static com.cloud.bees.challenge.util.ServiceErrors.*;
 
 
 @Slf4j
@@ -60,7 +61,7 @@ public class SeatService implements ISeatService {
     public Seat getSeat(Long id) {
         Optional<SeatEntity> entity = seatRepository.findById(id);
         if (entity.isEmpty()) {
-            throw new RuntimeException("Entity not Found");
+            throw new NotFoundException(SEAT_ENTITY_NOT_FOUND_BY_ID);
         }
         Seat seat = seatMapper.toResource(entity.get());
         seat.setSeatDetail(setSeatDetails(entity.get()));
@@ -85,7 +86,7 @@ public class SeatService implements ISeatService {
     public void deleteSeat(Long id) {
         Optional<SeatEntity> existingEntity = seatRepository.findById(id);
         if (existingEntity.isEmpty()) {
-            throw new RuntimeException("Entity not Found");
+            throw new NotFoundException(SEAT_ENTITY_NOT_FOUND_BY_ID);
         }
         log.info("Existing Seat to be deleted {}", existingEntity.get());
         seatRepository.delete(existingEntity.get());
@@ -96,7 +97,7 @@ public class SeatService implements ISeatService {
         List<Seat> seats = getSeats(occupied, null, null, seatNo);
         Optional<Seat> seat = seats.stream().filter(s -> s.getSeatNo().equalsIgnoreCase(seatNo)).findFirst();
         if (seat.isEmpty()) {
-            throw new RuntimeException("Seat not found");
+            throw new NotFoundException(SEAT_ENTITY_NOT_FOUND_BY_ID);
         }
         SeatEntity seatEntity = seatRepository.findSeatEntityBySeatNo(seat.get().getSeatNo());
         seatEntity.setOccupied(!occupied);
@@ -117,9 +118,11 @@ public class SeatService implements ISeatService {
     @Override
     public Seat changeSeat(Long sectionId, boolean occupied, String preferredSeatNo) {
         List<Seat> seats = getSeats(occupied, sectionId, null, null);
-        Optional<Seat> seat = seats.stream().filter(s -> s.getSeatNo().equalsIgnoreCase(preferredSeatNo)).filter(s -> !s.isOccupied()).findFirst();
+        Optional<Seat> seat = seats.stream()
+                .filter(s -> s.getSeatNo().equalsIgnoreCase(preferredSeatNo))
+                .filter(s -> !s.isOccupied()).findFirst();
         if (seat.isEmpty()) {
-            throw new RuntimeException("Given Preferred Seat is not Available at the moment");
+            throw new NotFoundException(PREFERRED_SEAT_NOT_AVAILABLE);
         }
         SeatEntity seatEntity = seatRepository.findSeatEntityBySeatNo(seat.get().getSeatNo());
         seatEntity.setOccupied(!occupied);
@@ -131,7 +134,7 @@ public class SeatService implements ISeatService {
     public List<Seat> getAllSeatsBySectionName(String name) {
         List<SeatEntity> entities = seatRepository.findSeatEntitiesBySection_Name(name);
         if (entities.isEmpty()) {
-            throw new RuntimeException("There is no available in the given section");
+            throw new NotFoundException(SEAT_NOT_AVAILABLE_BY_SECTION);
         }
         List<Seat> seats = seatMapper.toResources(entities);
         entities.forEach(seatEntity -> seats.forEach(seat -> seat.setSeatDetail(setSeatDetails(seatEntity))));
@@ -148,7 +151,7 @@ public class SeatService implements ISeatService {
             seats = seatRepository.findAvailableSeats(trainNo, occupied);
         }
         if (seats.isEmpty()) {
-            throw new RuntimeException("There is no available or occupied seats on the give section of the train");
+            throw new NotFoundException(SEAT_NOT_AVAILABLE);
         }
         return seatMapper.toResources(seats);
     }

@@ -2,6 +2,7 @@ package com.cloud.bees.challenge.service.impl;
 
 import com.cloud.bees.challenge.entity.SectionEntity;
 import com.cloud.bees.challenge.entity.TrainEntity;
+import com.cloud.bees.challenge.exception.NotFoundException;
 import com.cloud.bees.challenge.mapper.SectionMapper;
 import com.cloud.bees.challenge.model.Section;
 import com.cloud.bees.challenge.repository.SectionRepository;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.cloud.bees.challenge.service.util.ServiceUtil.setSectionAndSeatDetail;
+import static com.cloud.bees.challenge.util.ServiceErrors.*;
 
 @Slf4j
 @Service
@@ -56,7 +58,7 @@ public class SectionService implements ISectionService {
     public Section getSection(Long id) {
         Optional<SectionEntity> entity = sectionRepository.findById(id);
         if (entity.isEmpty()) {
-            throw new RuntimeException("Entity Not Found");
+            throw new NotFoundException(SECTION_ENTITY_NOT_FOUND_BY_ID);
         }
         Section section = sectionMapper.toResource(entity.get());
 
@@ -86,7 +88,7 @@ public class SectionService implements ISectionService {
     public void deleteSection(Long id) {
         Optional<SectionEntity> existingEntity = sectionRepository.findById(id);
         if (existingEntity.isEmpty()) {
-            throw new RuntimeException("Entity Not Found");
+            throw new NotFoundException(SECTION_ENTITY_NOT_FOUND_BY_ID);
         }
         log.info("Existing Section to be deleted {}", existingEntity.get());
         sectionRepository.delete(existingEntity.get());
@@ -96,7 +98,7 @@ public class SectionService implements ISectionService {
     public Section selectSection(Long trainId, String trainNo) {
         List<Section> availableSections = getAvailableSections(trainId, trainNo);
         if (availableSections.isEmpty()) {
-            throw new RuntimeException("There is no Available Sections on the Given TrainId or Train No");
+            throw new NotFoundException(SECTION_NOT_AVAILABLE_FOR_GIVEN_TRAIN_NO_OR_ID);
         }
         return availableSections.getFirst();
     }

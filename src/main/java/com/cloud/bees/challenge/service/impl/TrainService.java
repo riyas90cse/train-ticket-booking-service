@@ -1,6 +1,7 @@
 package com.cloud.bees.challenge.service.impl;
 
 import com.cloud.bees.challenge.entity.TrainEntity;
+import com.cloud.bees.challenge.exception.NotFoundException;
 import com.cloud.bees.challenge.mapper.TrainMapper;
 import com.cloud.bees.challenge.model.Train;
 import com.cloud.bees.challenge.repository.TrainRepository;
@@ -16,6 +17,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.cloud.bees.challenge.service.util.ServiceUtil.setSeatDetails;
+import static com.cloud.bees.challenge.util.ServiceErrors.TRAIN_ENTITY_NOT_FOUND_BY_ID;
+import static com.cloud.bees.challenge.util.ServiceErrors.TRAIN_NOT_AVAILABLE_FOR_GIVEN_LOCATION;
 
 @Slf4j
 @Service
@@ -49,7 +52,7 @@ public class TrainService implements ITrainService {
     public Train updateTrain(Train train) {
         Optional<TrainEntity> entity = trainRepository.findById(train.getId());
         if (entity.isEmpty()) {
-            throw new RuntimeException("Entity Not Found");
+            throw new NotFoundException(TRAIN_ENTITY_NOT_FOUND_BY_ID);
         }
         trainMapper.copyToEntity(train, entity.get());
         TrainEntity updatedEntity = trainRepository.saveAndFlush(entity.get());
@@ -63,7 +66,7 @@ public class TrainService implements ITrainService {
     public Train getTrain(Long id) {
         Optional<TrainEntity> entity = trainRepository.findById(id);
         if (entity.isEmpty()) {
-            throw new RuntimeException("Entity Not Found");
+            throw new NotFoundException(TRAIN_ENTITY_NOT_FOUND_BY_ID);
         }
         Train train = trainMapper.toResource(entity.get());
         setSections(entity.get(), train);
@@ -88,7 +91,7 @@ public class TrainService implements ITrainService {
     public void deleteTrain(Long id) {
         Optional<TrainEntity> entity = trainRepository.findById(id);
         if (entity.isEmpty()) {
-            throw new RuntimeException("Entity Not Found");
+            throw new NotFoundException(TRAIN_ENTITY_NOT_FOUND_BY_ID);
         }
         log.info("Existing Train to be deleted {}", entity.get());
         trainRepository.delete(entity.get());
@@ -98,7 +101,7 @@ public class TrainService implements ITrainService {
     public Train selectTrain(String from, String to) {
         List<Train> availableTrains = getAvailableTrainsByFromAndToLocation(from, to);
         if (availableTrains.isEmpty()) {
-            throw new RuntimeException("There is no Available Train for given from and to location");
+            throw new NotFoundException(TRAIN_NOT_AVAILABLE_FOR_GIVEN_LOCATION);
         }
         return availableTrains.getFirst();
     }
