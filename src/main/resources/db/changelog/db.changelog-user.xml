@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet author="Mohamed Riyas" id="create-seat-table">
+        <createTable tableName="USERS">
+            <column name="ID" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="PK_ID_USERS"/>
+            </column>
+            <column name="FIRST_NAME" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="LAST_NAME" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="EMAIL" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet  author="Mohamed Riyas"  id="addUniqueConstraint-first-name-last-name-email">
+        <addUniqueConstraint
+                columnNames="FIRST_NAME, LAST_NAME, EMAIL"
+                constraintName="UK_FIRST_LAST_NAME_AND_EMAIL"
+                tableName="USERS"
+                validate="true"/>
+    </changeSet>
+
+    <changeSet author="Mohamed Riyas" id="index-first-name-last-name-email">
+        <createIndex indexName="IDX_FIRST_LAST_NAME_AND_EMAIL" tableName="USERS">
+            <column name="FIRST_NAME"/>
+            <column name="LAST_NAME"/>
+            <column name="EMAIL"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet author="Mohamed Riyas" id="create-seat-table">
+        <createTable tableName="SEATS">
+            <column name="ID" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="PK_ID_SEATS"/>
+            </column>
+            <column name="SEAT_NO" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="SECTION_ID" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="IS_OCCUPIED" type="BOOLEAN" defaultValue="FALSE">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="Mohamed Riyas" id="addForeignKeyConstraint-section-id">
+        <addForeignKeyConstraint baseColumnNames="SECTION_ID"
+                                 baseTableName="SEATS"
+                                 constraintName="FK_SECTION_ID"
+                                 onDelete="CASCADE"
+                                 onUpdate="CASCADE"
+                                 referencedColumnNames="ID"
+                                 referencedTableName="SECTIONS"
+                                 validate="true"/>
+    </changeSet>
+
+    <changeSet  author="Mohamed Riyas"  id="addUniqueConstraint-seat-no-and-section-id">
+        <addUniqueConstraint
+                              columnNames="SEAT_NO, SECTION_ID"
+                              constraintName="UK_SEAT_SECTION_ID"
+                              tableName="SEATS"
+                              validate="true"/>
+    </changeSet>
+
+    <changeSet author="Mohamed Riyas" id="index-seat-no">
+        <createIndex indexName="IDX_SEAT_NO" tableName="SEATS">
+            <column name="SEAT_NO"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

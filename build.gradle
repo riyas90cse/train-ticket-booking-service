@@ -1,0 +1,67 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.2.2'
+	id 'io.spring.dependency-management' version '1.1.4'
+}
+
+group = 'com.cloud.bees.challenge'
+version = '0.0.1'
+
+java {
+	sourceCompatibility = '21'
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+
+	// Spring Web
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+
+	//Database,Migration & Data JPA
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.liquibase:liquibase-core'
+	runtimeOnly 'com.h2database:h2'
+
+	//Email Template
+	implementation 'org.springframework.boot:spring-boot-starter-freemarker'
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+	//Validation & Hibernate Types
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+	//Security
+//	implementation 'org.springframework.boot:spring-boot-starter-security'
+
+	//MapStruct, Lombok
+	implementation 'org.mapstruct:mapstruct:1.5.5.Final'
+	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
+	annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+
+
+	//DevTools, Health (Monitoring)
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+//	developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
+
+	//Open API Swagger
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.3'
+
+	//Testing
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+//	testImplementation 'org.springframework.security:spring-security-test'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}

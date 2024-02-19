@@ -1,0 +1,74 @@
+#VARIABLES
+HOST_URL: http://localhost
+PORT_NO: 8090
+
+# Application Custom Config
+app:
+  url: ${HOST_URL}:${PORT_NO}
+  title: Booking Engine
+  version: 0.0.1
+  author: Mohamed Riyas
+
+#Server Address and Context Path Config
+server:
+  port: ${PORT_NO}
+  servlet:
+    application-display-name: Train Ticket Booking Engine APIs
+
+#Logging Configuration
+logging:
+  level:
+    root: info
+    com.cloud.bees: debug
+
+#Open API (Swagger Config)
+springdoc:
+  api-docs:
+    path: /docs
+  swagger-ui:
+    path: /swagger-ui
+    try-it-out-enabled: true
+    operations-sorter: method
+    tags-sorter: alpha
+    filter: true
+
+---
+spring:
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.xml
+
+---
+#Spring JDBC, Liquibase, JPA/Hibernate Properties
+#Activate Profile based on Environment
+spring:
+  config:
+    activate:
+      on-profile: development
+
+  datasource:
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+    url: jdbc:h2:mem:booking_engine_db
+
+  jpa:
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+      ddl-auto: none
+    database: h2
+#    database-platform: org.hibernate.dialect.H2Dialect
+    defer-datasource-initialization: false
+    show-sql: true
+    generate-ddl: false
+
+    properties:
+      hibernate:
+        format_sql: true
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
