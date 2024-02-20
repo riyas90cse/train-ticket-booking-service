@@ -11,6 +11,7 @@ import java.util.List;
 @ToString(exclude = {"seats"})
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Section {
     private Long id;
     private String trainNo;

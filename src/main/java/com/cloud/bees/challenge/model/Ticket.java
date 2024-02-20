@@ -8,6 +8,7 @@ import lombok.*;
 @ToString(exclude = {"user", "seat"})
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Ticket {
     private Long id;
     private String ticketNo;

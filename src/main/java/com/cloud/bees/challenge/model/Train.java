@@ -11,6 +11,7 @@ import java.util.List;
 @ToString(exclude = {"sections"})
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Train {
 
     private Long id;

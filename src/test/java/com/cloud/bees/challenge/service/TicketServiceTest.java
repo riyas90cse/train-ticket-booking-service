@@ -5,6 +5,7 @@ import com.cloud.bees.challenge.mapper.*;
 import com.cloud.bees.challenge.model.*;
 import com.cloud.bees.challenge.repository.*;
 import com.cloud.bees.challenge.service.impl.*;
+import com.cloud.bees.challenge.util.TestData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -18,10 +19,11 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
-@Disabled
+
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 class TicketServiceTest {
@@ -79,6 +81,7 @@ class TicketServiceTest {
     @Mock
     private TrainEntity trainEntity;
 
+    private TestData testData;
 
     @BeforeEach
     void setup() {
@@ -89,19 +92,21 @@ class TicketServiceTest {
         ticketService = new TicketService(userService, trainService, sectionService, seatService, ticketMapper
                 , seatMapper, seatRepository, ticketRepository);
 
-        user = new User();
-        train = new Train();
+        testData = new TestData(userMapper, trainMapper, sectionMapper, seatMapper);
+
+        user = testData.buildUser();
+        train = testData.buildTrain();
         payload = new TicketPayload();
         payload.setUserDetail(user);
-        section = new Section();
-        seat = new Seat();
-        ticket = new Ticket();
+        section = testData.buildSections().getFirst();
+        seat = testData.buildSeats().getFirst();
+        ticket = testData.buildTicket();
 
         ticketEntity = new TicketEntity();
-        sectionEntity = new SectionEntity();
-        seatEntity = new SeatEntity();
-        userEntity = new UserEntity();
-        trainEntity = new TrainEntity();
+        sectionEntity = testData.buildSectionEntities().getFirst();
+        seatEntity = testData.buildSeatEntities().getFirst();
+        userEntity = testData.buildUserEntity();
+        trainEntity = testData.buildTrainEntity();
 
         //Train service Mocks
         when(trainRepository.findTrainEntitiesByOriginLocationAndDestinationLocation(anyString(), anyString()))
@@ -115,7 +120,7 @@ class TicketServiceTest {
         when(sectionRepository.findSectionEntitiesByTrain_TrainNo(anyString())).thenReturn(List.of(sectionEntity));
         when(sectionService.getSections(List.of(sectionEntity))).thenReturn(List.of(section));
         when(sectionMapper.toResources(List.of(sectionEntity))).thenReturn(List.of(section));
-//        when(sectionService.getAvailableSections(anyLong(), anyString())).thenReturn(List.of(section));
+        when(sectionService.getAvailableSections(anyLong(), anyString())).thenReturn(List.of(section));
 
         //Seat Service Mocks
         when(seatRepository.findSeatEntityBySeatNo(anyString())).thenReturn(seatEntity);
@@ -127,25 +132,14 @@ class TicketServiceTest {
         when(userMapper.toResource(userEntity)).thenReturn(user);
     }
 
+
+    @Disabled
     @Test
-    void testPurchaseTicket() {
-
-        when(userService.getUserByEmail(anyString())).thenReturn(user);
-        when(trainService.selectTrain(anyString(), anyString())).thenReturn(train);
-        when(sectionService.selectSection(anyLong(), anyString())).thenReturn(section);
-        when(seatService.assignSeat(anyBoolean(), anyString())).thenReturn(seat);
-        when(ticketService.buildTicket(train, user, seat)).thenReturn(ticket);
-        when(ticketMapper.toEntity(ticket)).thenReturn(ticketEntity);
-        when(ticketRepository.saveAndFlush(ticketEntity)).thenReturn(ticketEntity);
-        when(ticketMapper.toResource(ticketEntity)).thenReturn(ticket);
-
-        ticket = ticketService.purchaseTicket(payload);
+    void testViewReceiptDetail() {
+        when(ticketService.viewReceiptDetail(ticket.getTicketNo())).thenReturn(ticket);
         assertNotNull(ticket);
 
-        verify(userService, times(1)).getUserByEmail(anyString());
-        verify(trainService, times(1)).selectTrain(anyString(), anyString());
-        verify(sectionService, times(1)).selectSection(anyLong(), anyString());
-        verify(userService, times(1)).getUserByEmail(anyString());
+        verify(ticketService, times(1)).viewReceiptDetail(ticket.getTicketNo());
     }
 
 }

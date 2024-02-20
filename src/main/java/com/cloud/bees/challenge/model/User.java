@@ -11,6 +11,7 @@ import java.util.List;
 @ToString(exclude = {"tickets"})
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class User {
     private Long id;
     @NotNull

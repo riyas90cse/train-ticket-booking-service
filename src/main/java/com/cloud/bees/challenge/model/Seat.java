@@ -10,6 +10,7 @@ import java.util.Map;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Seat {
     private Long id;
     private String seatNo;
